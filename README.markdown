@@ -99,8 +99,6 @@ if including a name for error output, you must change errorForEqualTo to be an e
 ###-###-#### or
 ###-####</pre>
 </dd>
-<dt><strong>pid</strong></dt>
-<dd>must be a valid pid (numeric and nine digits long, - characters ignored)</dd>
 <dt><strong>required</strong></dt>
 <dd>may not be blank or consist of only whitespace characters</dd>
 <dt><strong>url</strong></dt>
