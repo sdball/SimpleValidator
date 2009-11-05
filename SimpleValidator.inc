@@ -60,6 +60,17 @@ class SimpleValidator
     if (!is_array($this->rules)) {
       throw new SimpleValidatorException("Invalid ruleset.", 1);
     }
+    
+    // find any keys that are in the rules, but not in the data
+    // if any of these keys have "required" then assign the error
+    $keysInRulesAndNotInData = array_diff_key($this->rules, $data);
+    foreach ($keysInRulesAndNotInData as $key => $ruleString) {
+      $rules = explode(' ', $ruleString);
+      if (in_array('required', $rules)) {
+        $this->errors[$key] = $this->errorForRequired;
+      }
+    }
+    
     $this->data = $data;
     foreach ($data as $key => $valueToValidate) {
       $valueToValidate = trim($valueToValidate);
