@@ -132,7 +132,7 @@ class SimpleValidator
   
   
   // =====================
-  // = private functions =
+  // = protected functions =
   // =====================
   /**
    * alpha : returns error message if $value is not alphabetic characters only
@@ -141,7 +141,7 @@ class SimpleValidator
    * @return mixed
    * @author Stephen Ball
    */
-  private function alpha($value)
+  protected function alpha($value)
   {
     if (!ctype_alpha($value)) {
       return $this->errorForAlpha;
@@ -156,7 +156,7 @@ class SimpleValidator
    * @return mixed
    * @author Stephen Ball
    */
-  private function choices($value, $valid_choices)
+  protected function choices($value, $valid_choices)
   {
     $valid_choices = explode(',', $valid_choices);
     if (!in_array($value, $valid_choices)) {
@@ -171,7 +171,7 @@ class SimpleValidator
    * @return mixed
    * @author Stephen Ball
    */
-  private function date($value)
+  protected function date($value)
   {
     if (($timestamp = strtotime($value)) === false) {
       return $this->errorForDate;
@@ -193,7 +193,7 @@ class SimpleValidator
    * @return mixed
    * @author Stephen Ball
    */
-  private function dateISO($value)
+  protected function dateISO($value)
   {
     $matches = array();
     if (!preg_match('/(\d{4})-(\d{2})-(\d{2})/', $value, $matches)) {
@@ -214,7 +214,7 @@ class SimpleValidator
    * @return mixed
    * @author Stephen Ball
    */
-  private function email($value)
+  protected function email($value)
   {
     // http://www.regular-expressions.info/email.html
     if (!preg_match('/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i', $value)) {
@@ -233,7 +233,7 @@ class SimpleValidator
    * @return mixed
    * @author Stephen Ball
    */
-  private function equalTo($value, $keyToMatch)
+  protected function equalTo($value, $keyToMatch)
   {
     $fieldName = $keyToMatch;
     if (strpos($keyToMatch, '|') !== False) {
@@ -253,7 +253,7 @@ class SimpleValidator
    * @return mixed
    * @author Stephen Ball
    */
-  private function length($value, $length)
+  protected function length($value, $length)
   {
     if (strlen($value) != intval($length)) {
       return str_replace('{length}', $length, $this->errorForLength);
@@ -268,7 +268,7 @@ class SimpleValidator
    * @return void
    * @author Stephen Ball
    */
-  private function max($value, $max)
+  protected function max($value, $max)
   {
     if (intval($value) > intval($max)) {
       return str_replace('{max}', $max, $this->errorForMax);
@@ -283,7 +283,7 @@ class SimpleValidator
    * @return mixed
    * @author Stephen Ball
    */
-  private function maxlength($value, $maxlength)
+  protected function maxlength($value, $maxlength)
   {
     if (strlen($value) > $maxlength) {
       return str_replace('{maxlength}', $maxlength, $this->errorForMaxLength);
@@ -298,7 +298,7 @@ class SimpleValidator
    * @return void
    * @author Stephen Ball
    */
-  private function min($value, $min)
+  protected function min($value, $min)
   {
     if (intval($value) < intval($min)) {
       return str_replace('{min}', $min, $this->errorForMin);
@@ -313,7 +313,7 @@ class SimpleValidator
    * @return mixed
    * @author Stephen Ball
    */
-  private function minlength($value, $minlength)
+  protected function minlength($value, $minlength)
   {
     if (strlen($value) < $minlength) {
       return str_replace('{minlength}', $minlength, $this->errorForMinLength);
@@ -327,7 +327,7 @@ class SimpleValidator
    * @return mixed
    * @author Stephen Ball
    */
-  private function numeric($value)
+  protected function numeric($value)
   {
     if (!ctype_digit($value)) {
       return $this->errorForNumeric;
@@ -341,10 +341,46 @@ class SimpleValidator
    * @return mixed
    * @author Stephen Ball
    */
-  private function phone($value)
+  protected function phone($value)
   {
-    if (!preg_match('/^1?-?(\d{3})?-?(\d{3})-?(\d{4})$/', $value)) { 
+    if (!preg_match('/^1?-?(\d{3})?-?(\d{2})?\d-?(\d{4})$/', $value)) { 
       return $this->errorForPhone;
+    }
+  }
+  
+  /**
+   * phrase : returns error message if $value is not a valid phrase
+   *
+   * i.e. alphabetic characters and some punctionation
+   *
+   * @param string $value 
+   * @return mixed
+   * @author Stephen Ball
+   */
+  protected function phrase($value)
+  {
+    if (!preg_match("/^[a-z \-.'&]*$/i", $value)) {
+      return $this->errorForPhrase;
+    }
+  }
+  
+  /**
+   * pid : returns error message if $value is invalid PID
+   *
+   * @param string $value 
+   * @return mixed
+   * @author Stephen Ball
+   */
+  protected function pid($value)
+  {
+    $value = str_replace('-', '', $value);
+    $error = $this->length($value, 9);
+    if ($error !== null) {
+      return $this->errorForPID;
+    }
+    $error = $this->numeric($value);
+    if ($error !== null) {
+      return $this->errorForPID;
     }
   }
   
@@ -355,7 +391,7 @@ class SimpleValidator
    * @return mixed
    * @author Stephen Ball
    */
-  private function required($value)
+  protected function required($value)
   {
     if (!strlen($value)) {
       return $this->errorForRequired;
@@ -369,7 +405,7 @@ class SimpleValidator
    * @return mixed
    * @author Stephen Ball
    */
-  private function url($value)
+  protected function url($value)
   {
     if (!preg_match('/^https?:\/\/[A-Z0-9.-]+\.[A-Z]{2,4}/i', $value)) {
       return $this->errorForURL;
@@ -383,7 +419,7 @@ class SimpleValidator
    * @return mixed
    * @author Stephen Ball
    */
-  private function zip($value)
+  protected function zip($value)
   {
     if (!preg_match('/^\d{5}-?(\d{4})?$/', $value)) {
       return $this->errorForZip;
