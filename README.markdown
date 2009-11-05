@@ -78,13 +78,20 @@ The placeholder will always be the name of the rule (e.g. {minlength}, {maxlengt
 # Validation Rules
 <dl> <dt><strong>alpha</strong></dt> <dd> value must consist of alphabetic characters only </dd> <dt><strong>choices=red,green,blue</strong></dt> <dd> value must be in the comma separated list
 
-in this case the value would have to be "red", "green", or "blue" </dd> <dt><strong>date</strong></dt> <dd> value must be a valid date </dd> <dt><strong>email</strong></dt> <dd> must be a valid email address: <a class="ext-link" href="http://www.regular-expressions.info/email.html"><span class="icon">http://www.regular-expressions.info/email.html</span></a> </dd> <dt><strong>equalTo=key</strong></dt> <dd> must be equal to data value for the given key
+in this case the value would have to be "red", "green", or "blue" </dd>
+
+<dt><strong>city</strong> (may not account for edge cases)</dt>
+<dd>Value must consist of characters valid for a US city name.</dd>
+
+<dt><strong>date</strong></dt> <dd> value must be a valid date </dd> <dt><strong>email</strong></dt> <dd> must be a valid email address: <a class="ext-link" href="http://www.regular-expressions.info/email.html"><span class="icon">http://www.regular-expressions.info/email.html</span></a> </dd> <dt><strong>equalTo=key</strong></dt> <dd> must be equal to data value for the given key
 
 can append an optional name for the key for the error message: <strong>equalTo=key|Key_Name</strong> (_ characters will be converted to spaces on output)
 
 if including a name for error output, you must change errorForEqualTo to be an error message with the '{equalto}' somewhere in the string, e.g. "This value must match {equalto}."
 
 </dd>
+<dt><strong>float</strong></dt>
+<dd>value must be a valid floating point number</dd>
 <dt><strong>length=number</strong> (e.g. length=10)</dt>
 <dd>length of value must be equal to number</dd>
 <dt><strong>maxlength=number</strong> (e.g. maxlength=10)</dt>
@@ -99,6 +106,8 @@ if including a name for error output, you must change errorForEqualTo to be an e
 ###-###-#### or
 ###-####</pre>
 </dd>
+<dt><strong>phrase</strong></dt>
+<dd>essentially "alpha" with allowed punctuation and spaces</dd>
 <dt><strong>required</strong></dt>
 <dd>may not be blank or consist of only whitespace characters</dd>
 <dt><strong>url</strong></dt>
