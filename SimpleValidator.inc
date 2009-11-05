@@ -262,6 +262,13 @@ class SimpleValidator
     }
   }
   
+  /**
+   * float : returns error message if $value is not a valid floating point
+   *
+   * @param string $value 
+   * @return mixed
+   * @author Stephen Ball
+   */
   protected function float($value)
   {
     if (!preg_match('/^[0-9]*\.?[0-9]+$/', $value)) {
