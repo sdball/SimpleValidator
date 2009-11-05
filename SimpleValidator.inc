@@ -15,7 +15,7 @@ class SimpleValidatorException extends Exception {}
 class SimpleValidator
 {
   // $rules is an array of keys to validation rules
-  //   e.g. {'firstname': 'required alpha', 'pid': 'required pid'}
+  //   e.g. {'firstname': 'required alpha'}
   function __construct($rules = array(), $errorMessages = array())
   {
     $this->rules = $rules;
@@ -361,26 +361,6 @@ class SimpleValidator
   {
     if (!preg_match("/^[a-z \-.'&]*$/i", $value)) {
       return $this->errorForPhrase;
-    }
-  }
-  
-  /**
-   * pid : returns error message if $value is invalid PID
-   *
-   * @param string $value 
-   * @return mixed
-   * @author Stephen Ball
-   */
-  protected function pid($value)
-  {
-    $value = str_replace('-', '', $value);
-    $error = $this->length($value, 9);
-    if ($error !== null) {
-      return $this->errorForPID;
-    }
-    $error = $this->numeric($value);
-    if ($error !== null) {
-      return $this->errorForPID;
     }
   }
   
