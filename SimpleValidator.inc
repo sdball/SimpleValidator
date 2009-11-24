@@ -60,8 +60,16 @@ class SimpleValidator
    */
   public function validate($data)
   {
+    $this->data = $data;
+    
     if (!is_array($this->rules)) {
       throw new SimpleValidatorException("Invalid ruleset.", 1);
+    }
+    
+    // "required_if" turns into "required" or is eliminated
+    // depending on the condition
+    foreach ($this->rules as $key => $rule) {
+      $this->rules[$key] = $this->parse_required_if($rule);
     }
     
     // find any keys that are in the rules, but not in the data
@@ -74,7 +82,6 @@ class SimpleValidator
       }
     }
     
-    $this->data = $data;
     foreach ($data as $key => $valueToValidate) {
       $valueToValidate = trim($valueToValidate);
       if (!isset($this->rules[$key])) {
@@ -102,12 +109,12 @@ class SimpleValidator
     $rules = explode(' ', $rule);
     
     // "required" is an exception to the regular rules
-    $requiredResult = $this->required($valueToValidate);
-    if ($requiredResult !== null) {
+    $requiredError = $this->required($valueToValidate);
+    if ($requiredError !== null) {
       if (in_array('required', $rules)) {
         // if field is required and empty
         // set the error and don't bother checking the other rules
-        return $requiredResult;
+        return $requiredError;
       }
       // if not required and empty then don't bother with further checks
       // unless we're dealing with "equalTo"
@@ -257,6 +264,9 @@ class SimpleValidator
       list($keyToMatch, $fieldName) = explode('|', $keyToMatch);
     }
     $fieldName = str_replace('_', ' ', $fieldName);
+    if (!isset($this->data[$keyToMatch])) {
+      return str_replace('{equalto}', $fieldName, $this->errorForEqualTo);
+    }
     if ($value != $this->data[$keyToMatch]) {
       return str_replace('{equalto}', $fieldName, $this->errorForEqualTo);
     }
@@ -435,7 +445,41 @@ class SimpleValidator
     if (!preg_match('/^\d{5}-?(\d{4})?$/', $value)) {
       return $this->errorForZip;
     }
-  }  
+  }
+  
+  // =====================
+  // = private functions =
+  // =====================
+  /**
+   * parse_required_if
+   *
+   * Modifies rule string (depending on conditions) to replace
+   * required_if with either "required" or nothing.
+   *
+   * @param string $ruleString
+   * @return string $ruleString
+   * @author Stephen Ball
+   */
+  private function parse_required_if($ruleString)
+  {
+    if (preg_match('/required_if=(\w+->\w+)/', $ruleString, $matches)) {
+      $requirement = $matches[1];
+      
+      list($key, $special_value) = explode('->', $requirement);
+      
+      if (isset($this->data[$key])) {
+        if ($this->data[$key] == $special_value) {
+          // all conditions are met, so rewrite the rules
+          // for this field to be "required"
+          return preg_replace(
+            '/required_if=\w+->\w+/', 'required', $ruleString);
+        }
+      }
+    }
+    // conditions are not met
+    // rewrite the rules to remove the 'required_if' statement
+    return preg_replace('/required_if=\w+->\w+/', '', $ruleString);
+  }
 }
 
 ?>
