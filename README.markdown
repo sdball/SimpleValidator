@@ -110,6 +110,9 @@ if including a name for error output, you must change errorForEqualTo to be an e
 <dd>essentially "alpha" with allowed punctuation and spaces</dd>
 <dt><strong>required</strong></dt>
 <dd>may not be blank or consist of only whitespace characters</dd>
+<dt><strong>required_if=field->specific_value</strong></dt>
+<dd>field is required if "field" is set to "specific_value"<br />
+  e.g. "required_if=color->blue" would make the current field required, if the "color" field had the value "blue"</dd>
 <dt><strong>url</strong></dt>
 <dd>must be a valid URL</dd>
 <dt><strong>zip</strong></dt>
