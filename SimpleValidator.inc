@@ -416,7 +416,7 @@ class SimpleValidator
    */
   protected function required($value)
   {
-    if (!strlen($value)) {
+    if (empty($value)) {
       return $this->errorForRequired;
     }
   }
