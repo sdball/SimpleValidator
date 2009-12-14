@@ -83,7 +83,9 @@ class SimpleValidator
     }
     
     foreach ($data as $key => $valueToValidate) {
-      $valueToValidate = trim($valueToValidate);
+      if (is_string($valueToValidate)) {
+        $valueToValidate = trim($valueToValidate);
+      }
       if (!isset($this->rules[$key])) {
         if ($this->ignoreUnexpectedKeys) {
           // ignore the unexpected key and skip to the next key
