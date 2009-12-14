@@ -25,25 +25,26 @@ class SimpleValidator
     $this->data = array();
     
     // error messages
-    $this->errorForAlpha     = 'Please enter only alphabetic characters.';
-    $this->errorForChoices   = 'Please enter a valid value.';
-    $this->errorForCity      = 'Please enter a valid city name.';
-    $this->errorForDate      = 'Please enter a valid date.';
-    $this->errorForDateISO   = 'Please enter a valid ISO date.';
-    $this->errorForEmail     = 'Please enter a valid email address.';
-    $this->errorForEqualTo   = 'Please enter the same value again.';
-    $this->errorForFloat     = 'Please enter a valid floating point number.';
-    $this->errorForLength    = 'Please enter {length} characters.';
-    $this->errorForMax       = 'Please enter a value less than or equal to {max}.';
-    $this->errorForMaxLength = 'Please enter no more than {maxlength} characters.';
-    $this->errorForMin       = 'Please enter a value greater than or equal to {min}.';
-    $this->errorForMinLength = 'Please enter no fewer than {minlength} characters.';
-    $this->errorForNumeric   = 'Please enter numbers only.';
-    $this->errorForPhone     = 'Please enter a valid phone number.';
-    $this->errorForPhrase    = 'Please enter a valid phrase.';
-    $this->errorForRequired  = 'This field is required.';
-    $this->errorForURL       = 'Please enter a valid URL.';
-    $this->errorForZip       = 'Please enter a valid zip code.';
+    $this->errorForAlpha      = 'Please enter only alphabetic characters.';
+    $this->errorForChoices    = 'Please enter a valid value.';
+    $this->errorForCity       = 'Please enter a valid city name.';
+    $this->errorForDate       = 'Please enter a valid date.';
+    $this->errorForDateISO    = 'Please enter a valid ISO date.';
+    $this->errorForEmail      = 'Please enter a valid email address.';
+    $this->errorForEqualTo    = 'Please enter the same value again.';
+    $this->errorForFloat      = 'Please enter a valid floating point number.';
+    $this->errorForLength     = 'Please enter {length} characters.';
+    $this->errorForMax        = 'Please enter a value less than or equal to {max}.';
+    $this->errorForMaxLength  = 'Please enter no more than {maxlength} characters.';
+    $this->errorForMin        = 'Please enter a value greater than or equal to {min}.';
+    $this->errorForMinLength  = 'Please enter no fewer than {minlength} characters.';
+    $this->errorForNotEqualTo = 'Please enter a different value.';
+    $this->errorForNumeric    = 'Please enter numbers only.';
+    $this->errorForPhone      = 'Please enter a valid phone number.';
+    $this->errorForPhrase     = 'Please enter a valid phrase.';
+    $this->errorForRequired   = 'This field is required.';
+    $this->errorForURL        = 'Please enter a valid URL.';
+    $this->errorForZip        = 'Please enter a valid zip code.';
   }
   
   
@@ -360,6 +361,43 @@ class SimpleValidator
   {
     if (strlen($value) < $minlength) {
       return str_replace('{minlength}', $minlength, $this->errorForMinLength);
+    }
+  }
+  
+  /**
+   * none : no validation, explicitly
+   *
+   * @param string $value 
+   * @return void
+   * @author Stephen Ball
+   */
+  protected function none($value)
+  {
+    return;
+  }
+  
+  /**
+   * notEqualTo : returns error if $value is equal to $data[$keyToDiffer]
+   *
+   * optional: $keyToDiffer can include a name for key to make the error
+   * message clearer to the end user
+   *
+   * @param string $value 
+   * @param string $keyToDiffer 
+   * @return mixed
+   * @author Stephen Ball
+   */
+  protected function notEqualTo($value, $keyToDiffer)
+  {
+    $fieldName = $keyToDiffer;
+    if (strpos($keyToDiffer, '|') !== False) {
+      list($keyToDiffer, $fieldName) = explode('|', $keyToDiffer);
+    }
+    $fieldName = str_replace('_', ' ', $fieldName);
+    if (isset($this->data[$keyToDiffer])) {
+      if ($value == $this->data[$keyToDiffer]) {
+        return str_replace('{notequalto}', $fieldName, $this->errorForNotEqualTo);
+      }
     }
   }
   
