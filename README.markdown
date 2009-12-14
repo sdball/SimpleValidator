@@ -76,20 +76,24 @@ For rules that accept an argument, you can set a placeholder for that argument t
 The placeholder will always be the name of the rule (e.g. {minlength}, {maxlength}, {length}). This placeholder is optional and can be used more than once in an error message if you are feeling repetitive. “{length} shall be the number thou shalt count, and the number of the counting shall be {length}.”
 
 # Validation Rules
-<dl> <dt><strong>alpha</strong></dt> <dd> value must consist of alphabetic characters only </dd> <dt><strong>choices=red,green,blue</strong></dt> <dd> value must be in the comma separated list
+<dl>
+  <dt><strong>alpha</strong></dt>
+  <dd>value must consist of alphabetic characters only</dd>
+  
+  <dt><strong>choices=red,green,blue</strong></dt>
+  <dd>value must be in the comma separated list<br />in this case the value would have to be "red", "green", or "blue"</dd>
 
-in this case the value would have to be "red", "green", or "blue" </dd>
-
-<dt><strong>city</strong> (may not account for edge cases)</dt>
-<dd>Value must consist of characters valid for a US city name.</dd>
-
-<dt><strong>date</strong></dt> <dd> value must be a valid date </dd> <dt><strong>email</strong></dt> <dd> must be a valid email address: <a class="ext-link" href="http://www.regular-expressions.info/email.html"><span class="icon">http://www.regular-expressions.info/email.html</span></a> </dd> <dt><strong>equalTo=key</strong></dt> <dd> must be equal to data value for the given key
-
-can append an optional name for the key for the error message: <strong>equalTo=key|Key_Name</strong> (_ characters will be converted to spaces on output)
-
-if including a name for error output, you must change errorForEqualTo to be an error message with the '{equalto}' somewhere in the string, e.g. "This value must match {equalto}."
-
-</dd>
+  <dt><strong>city</strong> (may not account for edge cases)</dt>
+  <dd>Value must consist of characters valid for a US city name</dd>
+  
+  <dt><strong>date</strong></dt>
+  <dd>value must be a valid date</dd>
+  
+  <dt><strong>email</strong></dt>
+  <dd>must be a valid email address: <a class="ext-link" href="http://www.regular-expressions.info/email.html"><span class="icon">http://www.regular-expressions.info/email.html</span></a></dd>
+  
+  <dt><strong>equalTo=key</strong></dt>
+  <dd>must be equal to data value for the given key<br />can append an optional name for the key for the error message: <strong>equalTo=key|Key_Name</strong> (_ characters will be converted to spaces on output)<br />if including a name for error output, you must change errorForEqualTo to be an error message with '{equalto}' somewhere in the string, e.g. "This value must match {equalto}."</dd>
 <dt><strong>float</strong></dt>
 <dd>value must be a valid floating point number</dd>
 <dt><strong>length=number</strong> (e.g. length=10)</dt>
@@ -98,6 +102,10 @@ if including a name for error output, you must change errorForEqualTo to be an e
 <dd>length of value must not be longer than number</dd>
 <dt><strong>minlength=number</strong> (e.g. minlength=10)</dt>
 <dd>length of value must not be shorter than number</dd>
+<dt><strong>none</strong></dt>
+<dd>no validation, explicitly</dd>
+<dt><strong>notEqualTo=key</strong></dt>
+<dd>must not be equal to value for "key"<br />can append an optional name for the key for the error message: <strong>notEqualTo=key|Key_Name</strong> (_ characters will be converted to spaces on output)<br />if including a name for error output, you must change errorForEqualTo to be an error message with '{notequalto}' somewhere in the string, e.g. "This value must not match {notequalto}."</dd>
 <dt><strong>numeric</strong></dt>
 <dd>value must consist of numbers only</dd>
 <dt><strong>phone</strong></dt>
@@ -147,7 +155,7 @@ You use your new class exactly as you would a regular instance of SimpleValidato
     $data = array('input' => 9);
     $errors = $extraValidator->validate($data);
 
-# Custom Validation Rule with Argument
+# Custom Validation Rules with An Argument
 
 Creating a custom validation rule that takes an argument is exactly the same as above, but your method should take two arguments: one for the value to be validated and one for the extra data.
 
