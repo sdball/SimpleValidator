@@ -478,7 +478,7 @@ class SimpleValidator
     }
     // conditions are not met
     // rewrite the rules to remove the 'required_if' statement
-    return preg_replace('/required_if=\w+->\w+/', '', $ruleString);
+    return preg_replace('/\s?required_if=\w+->\w+\s?/', '', $ruleString);
   }
 }
 
