@@ -164,16 +164,25 @@ class SimpleValidator
   /**
    * choices : returns error message if $value is not in $valid_choices
    *
-   * @param string $value 
+   * @param mixed $value
    * @param string $valid_choices (comma separated)
    * @return mixed
    * @author Stephen Ball
    */
   protected function choices($value, $valid_choices)
   {
-    $valid_choices = explode(',', $valid_choices);
-    if (!in_array($value, $valid_choices)) {
-      return $this->errorForChoices;
+    if (is_array($value)) {
+      foreach ($value as $v) {
+        $error = $this->choices($v, $valid_choices);
+        if ($error) {
+          return $error;
+        }
+      }
+    } else {
+      $valid_choices = explode(',', $valid_choices);
+      if (!in_array($value, $valid_choices)) {
+        return $this->errorForChoices;
+      }
     }
   }
   
