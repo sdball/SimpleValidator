@@ -33,7 +33,7 @@ class ValidatorRequiredIfTest extends Validator_TestCase {
   
     $validation_rules = array(
         'new_member' => 'required choices=yes,no',
-        'email'      => 'required_if=new_member->yes'
+        'email'      => 'email required_if=new_member->yes'
     );
     
     $data = array(
@@ -56,7 +56,7 @@ class ValidatorRequiredIfTest extends Validator_TestCase {
   
     $validation_rules = array(
         'new_member' => 'required choices=yes,no',
-        'email'      => 'required_if=new_member->yes'
+        'email'      => 'email required_if=new_member->yes'
     );
     
     $data = array(
