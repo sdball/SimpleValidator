@@ -451,9 +451,12 @@ class SimpleValidator
    */
   protected function phone($value)
   {
-    if (!preg_match('/^1?-?(\d{3})?-?(\d{2})?\d-?(\d{4})$/', $value)) { 
-      return $this->errorForPhone;
+    $valid   = FALSE;
+    $working = preg_replace('/\D/', '', $value);
+    if (strlen($working) == 10 || strlen($working == 11)) {
+      $valid = TRUE;
     }
+    return $valid ? NULL : $this->errorForPhone;
   }
   
   /**
