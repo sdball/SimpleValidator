@@ -268,10 +268,17 @@ class SimpleValidator
    * @return mixed
    * @author Stephen Ball
    */
-  protected function email($value)
-  {
+  protected function email($value) {
     // http://www.regular-expressions.info/email.html
-    if (!preg_match('/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i', $value)) {
+    $expression = '/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i';
+    if (!preg_match($expression, $value)
+        || (strpos($value, '..') !== FALSE)
+        || (strpos($value, '..') !== FALSE)
+        || (strpos($value, '@-') !== FALSE)
+        || (strpos($value, '.@') !== FALSE)
+        || (strpos($value, '@.') !== FALSE)
+        || ($value{0} == '.')
+    ) {
       return $this->errorForEmail;
     }
   }
