@@ -1,4 +1,8 @@
-# Standard Usage
+[![Build Status](https://secure.travis-ci.org/there4/SimpleValidator.png?branch=master)](http://travis-ci.org/there4/SimpleValidator)
+
+# Simple Validator
+
+## Standard Usage
 
     require "path/to/SimpleValidator.inc";
     // array describing the keys to look for and their validation rules
@@ -47,9 +51,9 @@
       // valid data
     }
 
-# Object Setup
+## Object Setup
 
-## Setting up the validation rules
+### Setting up the validation rules
 
 SimpleValidator depends on an associative array of rules that you give to it. The array defines: the keys to look for in the data to be validated and the rules to check the values for those keys against.
 
@@ -61,7 +65,7 @@ But you could also define the rules after initializing the object, perhaps if yo
 
 `$validator->rules = $new_validation_rules;`
 
-## Custom Error Messages
+### Custom Error Messages
 
 Each rule has an associated error message built in. For example: the default error message for “required” is “This field is required.” You can reassign any of the error messages to ones of your choosing by assigning your own error message. The variable to set will always follow the pattern: errorFor(validation method in CapitalCase), e.g. errorForMaxLength.
 
@@ -75,7 +79,7 @@ For rules that accept an argument, you can set a placeholder for that argument t
 
 The placeholder will always be the name of the rule (e.g. {minlength}, {maxlength}, {length}). This placeholder is optional and can be used more than once in an error message if you are feeling repetitive. “{length} shall be the number thou shalt count, and the number of the counting shall be {length}.”
 
-# Validation Rules
+## Validation Rules
 <dl>
   <dt><strong>alpha</strong></dt>
   <dd>value must consist of alphabetic characters only</dd>
@@ -133,7 +137,7 @@ The placeholder will always be the name of the rule (e.g. {minlength}, {maxlengt
 </dl>
 
 
-# Custom Validation Rules
+## Custom Validation Rules
 
 To add your own custom validation rules simply extend the class adding new protected (or public) methods for validation. The methods MUST match the validation rule you want to declare. For example, if you want to add a rule called “divisibleByThree” then your method must have the name “divisibleByThree”. Your custom method must take one argument (the data to be validated) and return a error message (string) if the data is not valid and null if the data is valid. Note that PHP returns null by default if the method doesn’t do so explicitly.
 
@@ -155,7 +159,7 @@ You use your new class exactly as you would a regular instance of SimpleValidato
     $data = array('input' => 9);
     $errors = $extraValidator->validate($data);
 
-# Custom Validation Rules with An Argument
+## Custom Validation Rules with An Argument
 
 Creating a custom validation rule that takes an argument is exactly the same as above, but your method should take two arguments: one for the value to be validated and one for the extra data.
 
