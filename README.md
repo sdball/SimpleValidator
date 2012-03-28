@@ -2,6 +2,8 @@
 
 # Simple Validator
 
+A simple data validation class for PHP.
+
 ## Standard Usage
 
     require "path/to/SimpleValidator.inc";
