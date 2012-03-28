@@ -444,7 +444,7 @@ class SimpleValidator
    */
   protected function numeric($value)
   {
-    if (!ctype_digit($value)) {
+    if (!is_numeric($value)) {
       return $this->errorForNumeric;
     }
   }
