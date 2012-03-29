@@ -25,26 +25,27 @@ class SimpleValidator
     $this->data = array();
     
     // error messages
-    $this->errorForAlpha      = 'Please enter only alphabetic characters.';
-    $this->errorForChoices    = 'Please enter a valid value.';
-    $this->errorForCity       = 'Please enter a valid city name.';
-    $this->errorForDate       = 'Please enter a valid date.';
-    $this->errorForDateISO    = 'Please enter a valid ISO date.';
-    $this->errorForEmail      = 'Please enter a valid email address.';
-    $this->errorForEqualTo    = 'Please enter the same value again.';
-    $this->errorForFloat      = 'Please enter a valid floating point number.';
-    $this->errorForLength     = 'Please enter {length} characters.';
-    $this->errorForMax        = 'Please enter a value less than or equal to {max}.';
-    $this->errorForMaxLength  = 'Please enter no more than {maxlength} characters.';
-    $this->errorForMin        = 'Please enter a value greater than or equal to {min}.';
-    $this->errorForMinLength  = 'Please enter no fewer than {minlength} characters.';
-    $this->errorForNotEqualTo = 'Please enter a different value.';
-    $this->errorForNumeric    = 'Please enter numbers only.';
-    $this->errorForPhone      = 'Please enter a valid phone number.';
-    $this->errorForPhrase     = 'Please enter a valid phrase.';
-    $this->errorForRequired   = 'This field is required.';
-    $this->errorForURL        = 'Please enter a valid URL.';
-    $this->errorForZip        = 'Please enter a valid zip code.';
+    $this->errorForAlpha           = 'Please enter only alphabetic characters.';
+    $this->errorForChoices         = 'Please enter a valid value.';
+    $this->errorForCity            = 'Please enter a valid city name.';
+    $this->errorForDate            = 'Please enter a valid date.';
+    $this->errorForDateISO         = 'Please enter a valid ISO date.';
+    $this->errorForDateGreaterThan = 'Please enter a date that is before {date}.';
+    $this->errorForEmail           = 'Please enter a valid email address.';
+    $this->errorForEqualTo         = 'Please enter the same value again.';
+    $this->errorForFloat           = 'Please enter a valid floating point number.';
+    $this->errorForLength          = 'Please enter {length} characters.';
+    $this->errorForMax             = 'Please enter a value less than or equal to {max}.';
+    $this->errorForMaxLength       = 'Please enter no more than {maxlength} characters.';
+    $this->errorForMin             = 'Please enter a value greater than or equal to {min}.';
+    $this->errorForMinLength       = 'Please enter no fewer than {minlength} characters.';
+    $this->errorForNotEqualTo      = 'Please enter a different value.';
+    $this->errorForNumeric         = 'Please enter numbers only.';
+    $this->errorForPhone           = 'Please enter a valid phone number.';
+    $this->errorForPhrase          = 'Please enter a valid phrase.';
+    $this->errorForRequired        = 'This field is required.';
+    $this->errorForURL             = 'Please enter a valid URL.';
+    $this->errorForZip             = 'Please enter a valid zip code.';
   }
   
   
@@ -242,6 +243,23 @@ class SimpleValidator
       return $this->errorForDateISO;
     }
   }
+
+  /**
+   * dateGreaterThan : returns error message if $value is before another date
+   *
+   * @param string $value      data for validation 
+   * @param string $keyToMatch key of value to compare to
+   *
+   * @return mixed
+   */
+  protected function dateGreaterThan($value, $keyToMatch) {
+    if ($this->date($value)) {
+      return $this->errorForDate;
+    }
+    if (strtotime($value) < strtotime($this->data[$keyToMatch])) {
+      return $this->errorForDateGreaterThan;
+    }
+  }
   
   /**
    * email : returns error message if $value is not a valid email address
@@ -250,10 +268,17 @@ class SimpleValidator
    * @return mixed
    * @author Stephen Ball
    */
-  protected function email($value)
-  {
+  protected function email($value) {
     // http://www.regular-expressions.info/email.html
-    if (!preg_match('/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i', $value)) {
+    $expression = '/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i';
+    if (!preg_match($expression, $value)
+        || (strpos($value, '..') !== FALSE)
+        || (strpos($value, '..') !== FALSE)
+        || (strpos($value, '@-') !== FALSE)
+        || (strpos($value, '.@') !== FALSE)
+        || (strpos($value, '@.') !== FALSE)
+        || ($value{0} == '.')
+    ) {
       return $this->errorForEmail;
     }
   }
@@ -419,7 +444,7 @@ class SimpleValidator
    */
   protected function numeric($value)
   {
-    if (!ctype_digit($value)) {
+    if (!is_numeric($value)) {
       return $this->errorForNumeric;
     }
   }
@@ -433,9 +458,12 @@ class SimpleValidator
    */
   protected function phone($value)
   {
-    if (!preg_match('/^1?-?(\d{3})?-?(\d{2})?\d-?(\d{4})$/', $value)) { 
-      return $this->errorForPhone;
+    $valid   = FALSE;
+    $working = preg_replace('/\D/', '', $value);
+    if (strlen($working) == 10 || strlen($working == 11)) {
+      $valid = TRUE;
     }
+    return $valid ? NULL : $this->errorForPhone;
   }
   
   /**
