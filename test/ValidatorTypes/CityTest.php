@@ -22,7 +22,6 @@ class ValidatorCityTest extends Validator_TestCase {
   }
   
   /**
-   * @covers Validator::city
    * @dataProvider data_BadCities
    */
   public function testRuleInvalidCity($city) {
