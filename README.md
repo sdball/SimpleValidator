@@ -1,6 +1,4 @@
-[![Build Status](https://secure.travis-ci.org/there4/SimpleValidator.png?branch=master)](http://travis-ci.org/there4/SimpleValidator)
-
-# Simple Validator
+# Simple Validator [![Build Status](https://secure.travis-ci.org/sdball/SimpleValidator.png?branch=master)](http://travis-ci.org/sdball/SimpleValidator)
 
 A simple data validation class for PHP.
 
@@ -19,13 +17,13 @@ A simple data validation class for PHP.
         'password'       => 'required minlength=8',
         'password-again' => 'equalTo=password'
     );
-    
+
     $validator = new SimpleValidator($rules);
     // Set this to true if you don't want
     // exceptions thrown when SimpleValidator finds keys
     // that it hasn't been given rules for
     // $validator->ignoreUnexpectedKeys = True;
- 
+
     // assuming $_POST contains the form data
     // validate returns an array of error messages
     try {
@@ -37,7 +35,7 @@ A simple data validation class for PHP.
       <p>SimpleValidator Error: < ?php echo $e->getMessage(); ?></p>
       < ?php
     }
-    
+
     if (empty($errors)) {
       // no errors in the data, processing can proceed
     } else {
@@ -85,19 +83,19 @@ The placeholder will always be the name of the rule (e.g. {minlength}, {maxlengt
 <dl>
   <dt><strong>alpha</strong></dt>
   <dd>value must consist of alphabetic characters only</dd>
-  
+
   <dt><strong>choices=red,green,blue</strong></dt>
   <dd>value must be in the comma separated list<br />in this case the value would have to be "red", "green", or "blue"</dd>
 
   <dt><strong>city</strong> (may not account for edge cases)</dt>
   <dd>Value must consist of characters valid for a US city name</dd>
-  
+
   <dt><strong>date</strong></dt>
   <dd>value must be a valid date</dd>
-  
+
   <dt><strong>email</strong></dt>
   <dd>must be a valid email address: <a class="ext-link" href="http://www.regular-expressions.info/email.html"><span class="icon">http://www.regular-expressions.info/email.html</span></a></dd>
-  
+
   <dt><strong>equalTo=key</strong></dt>
   <dd>must be equal to data value for the given key<br />can append an optional name for the key for the error message: <strong>equalTo=key|Key_Name</strong> (_ characters will be converted to spaces on output)<br />if including a name for error output, you must change errorForEqualTo to be an error message with '{equalto}' somewhere in the string, e.g. "This value must match {equalto}."</dd>
 <dt><strong>float</strong></dt>
@@ -154,7 +152,7 @@ To add your own custom validation rules simply extend the class adding new prote
 
 You use your new class exactly as you would a regular instance of SimpleValidator.
 
-    // the numeric rule is a good idea unless you want to ensure 
+    // the numeric rule is a good idea unless you want to ensure
     // that your divisibleByThree method properly handles string input
     $rules = array('input' => 'numeric divisibleByThree');
     $extraValidator = new ExtraValidator($rules);
